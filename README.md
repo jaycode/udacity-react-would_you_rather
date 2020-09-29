@@ -1,6 +1,6 @@
 # udacity-react-would_you_rather
 
-A super simple voting front-end made with ReactJS.
+A super simple voting app front-end made with ReactJS.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
