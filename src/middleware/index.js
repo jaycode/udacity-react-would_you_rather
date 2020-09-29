@@ -1,10 +1,8 @@
 import logger from './logger'
 import { applyMiddleware } from 'redux'
-import createSagaMiddleware from 'redux-saga'
-
-export const sagaMiddleware = createSagaMiddleware()
+import thunk from 'redux-thunk'
 
 export default applyMiddleware(
-  logger,
-  sagaMiddleware
+  thunk,
+  logger
 )

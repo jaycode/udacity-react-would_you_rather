@@ -1,48 +1,54 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FaReact as Logo } from 'react-icons/fa'
-import { useDispatch } from 'react-redux'
 import Card from 'react-bootstrap/Card'
-import { Container, Row, Col } from 'react-bootstrap'
-import { Form, Button} from 'react-bootstrap'
+import { Button} from 'react-bootstrap'
+import UserSelector from '../components/UserSelector'
+import { Redirect } from 'react-router-dom'
+import { handleGetUsers } from '../actions/users'
+import { useDispatch, useSelector } from 'react-redux'
+import { handleLogin } from '../actions/authedUser'
 
-const handleLogin = (e) => {
+export default function Login({location}) {
+  const redirectTo = location.redirectTo === undefined ? "/" : location.redirectTo
+  const authedUserId = useSelector(state => state.authedUserId)
+  const [activeId, setActiveId] = useState(null)
 
-}
-
-const handleInitialData = (e) => {
-  
-}
-
-
-export default function Login() {
   const dispatch = useDispatch()
-
   useEffect(() => {
-    handleInitialData()
-  }, []);
+    dispatch(handleGetUsers())
+  }, [dispatch]);
 
-  return (
-    <Row>
-      <Col>
-        <Card className="text-center mx-auto" style={{width: '500px'}}>
-          <Card.Header>
-            <Card.Title>Welcome to the Would You Rather App!</Card.Title>
-            <Card.Subtitle>Please sign in to continue</Card.Subtitle>
-          </Card.Header>
-          <Card.Body className="window-content">
-            <Logo className="logo" />
-            <p class="sign-in">Sign in</p>
-            <Form>
-              <Form.Control as="select">
-              </Form.Control>
-              <br />
-              <Button variant="primary" type="submit" onClick={handleLogin}>
-                Sign In
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-      </Col>
-    </Row>
-  )
+  const onChoose = (e, id) => {
+    setActiveId(id)
+  }
+
+  const onSubmit = (e) => {
+    e.preventDefault()
+    dispatch(handleLogin(activeId))
+  }
+
+  if (authedUserId !== null) {
+    return <Redirect to={redirectTo} />
+  }
+  else {
+    return (
+      <Card className="text-center large_card login">
+        <Card.Header>
+          <Card.Title>Welcome to the Would You Rather App!</Card.Title>
+          <Card.Subtitle>Please sign in to continue</Card.Subtitle>
+        </Card.Header>
+        <Card.Body className="window-content">
+          <Logo className="logo" />
+          <p className="sign-in">Sign in</p>
+          <div>
+            <UserSelector onChoose={onChoose} />
+            <br />
+            <Button className="submit" type="submit" onClick={onSubmit}>
+              Sign In
+            </Button>
+          </div>
+        </Card.Body>
+      </Card>
+    )
+  }
 }
