@@ -1,10 +1,11 @@
 import { showLoading, hideLoading } from 'react-redux-loading-bar'
-import { saveQuestionAnswer, saveQuestion, getQuestions, getUsers } from '../utils/api'
-import { receiveUsers } from '../actions/users'
+import { saveQuestionAnswer, saveQuestion } from '../utils/api'
 
 export const RECEIVE_QUESTIONS = 'RECEIVE_QUESTIONS'
 export const RECEIVE_NEW_QUESTION_ID = 'RECEIVE_NEW_QUESTION_ID'
 export const DELETE_NEW_QUESTION_ID = 'DELETE_NEW_QUESTION_ID'
+export const RECEIVE_QUESTION_ANSWER = 'RECEIVE_QUESTION_ANSWER'
+export const RECEIVE_SAVED_QUESTION = 'RECEIVE_SAVED_QUESTION'
 
 export function receiveQuestions (questions) {
   return {
@@ -28,20 +29,29 @@ export function deleteNewQuestionId (newQuestionId) {
   }
 }
 
+export function receiveQuestionAnswer(authedUserId, qid, answer) {
+  return {
+    type: RECEIVE_QUESTION_ANSWER,
+    authedUserId,
+    qid,
+    answer
+  }
+}
+
+export function receiveSavedQuestion(newQuestion) {
+  return {
+    type: RECEIVE_SAVED_QUESTION,
+    newQuestion
+  }
+}
+
 export function handleAnswerQuestion(authedUserId, qid, answer) {
   return (dispatch) => {
     dispatch(showLoading())
     return saveQuestionAnswer({ authedUser: authedUserId, qid: qid, answer: answer })
       .then(() => {
-        return getQuestions()
-          .then(({ questions }) => {
-            return getUsers()
-              .then(({ users }) => {
-                dispatch(receiveQuestions(questions))
-                dispatch(receiveUsers(users))
-                dispatch(hideLoading())
-              })
-          })
+        dispatch(receiveQuestionAnswer(authedUserId, qid, answer))
+        dispatch(hideLoading())
       })
   }
 }
@@ -51,17 +61,9 @@ export function handleSaveQuestion(question) {
     dispatch(showLoading())
     return saveQuestion(question)
       .then((newQuestion) => {
-        return getQuestions()
-          .then(({ questions }) => {
-            return getUsers()
-              .then(({ users }) => {
-                dispatch(receiveQuestions(questions))
-                dispatch(receiveUsers(users))
-                // No longer needed since we redirect to the homepage
-                dispatch(receiveNewQuestionId(newQuestion.id))
-                dispatch(hideLoading())
-              })
-          })
+        dispatch(receiveSavedQuestion(newQuestion))
+        dispatch(receiveNewQuestionId(newQuestion.id))
+        dispatch(hideLoading())
       })
   }
 }

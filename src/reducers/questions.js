@@ -1,4 +1,8 @@
-import { RECEIVE_QUESTIONS, RECEIVE_NEW_QUESTION_ID, DELETE_NEW_QUESTION_ID } from '../actions/questions'
+import { RECEIVE_QUESTIONS,
+         RECEIVE_NEW_QUESTION_ID, 
+         DELETE_NEW_QUESTION_ID, 
+         RECEIVE_QUESTION_ANSWER,
+         RECEIVE_SAVED_QUESTION } from '../actions/questions'
 
 export function questions (state = {}, action) {
   switch(action.type) {
@@ -7,6 +11,12 @@ export function questions (state = {}, action) {
         ...state,
         ...action.questions
       }
+    case RECEIVE_QUESTION_ANSWER :
+      state[action.qid][action.answer]['votes'].push(action.authedUserId)
+      return state
+    case RECEIVE_SAVED_QUESTION :
+      state[action.newQuestion.id] = action.newQuestion
+      return state
     default :
       return state
   }
