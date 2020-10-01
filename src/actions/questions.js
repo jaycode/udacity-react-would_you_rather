@@ -1,6 +1,5 @@
 import { showLoading, hideLoading } from 'react-redux-loading-bar'
 import { saveQuestionAnswer, saveQuestion, getQuestions, getUsers } from '../utils/api'
-import { setAuthedUser } from '../actions/authedUser'
 import { receiveUsers } from '../actions/users'
 
 export const RECEIVE_QUESTIONS = 'RECEIVE_QUESTIONS'
@@ -54,9 +53,14 @@ export function handleSaveQuestion(question) {
       .then((newQuestion) => {
         return getQuestions()
           .then(({ questions }) => {
-            dispatch(receiveQuestions(questions))
-            dispatch(receiveNewQuestionId(newQuestion.id))
-            dispatch(hideLoading())
+            return getUsers()
+              .then(({ users }) => {
+                dispatch(receiveQuestions(questions))
+                dispatch(receiveUsers(users))
+                // No longer needed since we redirect to the homepage
+                dispatch(receiveNewQuestionId(newQuestion.id))
+                dispatch(hideLoading())
+              })
           })
       })
   }

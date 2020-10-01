@@ -14,7 +14,6 @@ import Leaderboard from './Leaderboard'
 
 function App(props, store) {
   const authedUserId = useSelector(state => state.authedUserId)
-  console.log("authedUserId is " + authedUserId)
   
   return (
     <Fragment>

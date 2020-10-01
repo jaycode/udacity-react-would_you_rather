@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route } from 'react-router-dom'
 import Card from 'react-bootstrap/Card'
 import { ButtonGroup, Button } from 'react-bootstrap'
 import QuestionList from './QuestionList'
 import { NavLink } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { deleteNewQuestionId } from '../actions/questions'
 
 export default function Home(props) {
   const buttons = [
@@ -18,6 +20,13 @@ export default function Home(props) {
       className: 'button-answered'
     },
   ]
+
+  // To reactivate the new question page
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(deleteNewQuestionId())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Card className="text-center large_card">

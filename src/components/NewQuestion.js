@@ -37,7 +37,11 @@ export default function NewQuestion(props) {
   }
 
   if (newQuestionId !== null) {
-    return <Redirect to={`/questions/${newQuestionId}`} />
+    // Redirect to new question poll (as I think the app should do)
+    // return <Redirect to={`/questions/${newQuestionId}`} />
+    // Redirect to home (as required by the specifications)
+    return <Redirect to={'/'} />
+
   }
 
   return (

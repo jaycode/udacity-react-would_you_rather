@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react'
-import { useCallback, useRef } from 'react'
+import { useRef } from 'react'
 import { useSelector } from 'react-redux'
 import LeaderboardItem from './LeaderboardItem'
 

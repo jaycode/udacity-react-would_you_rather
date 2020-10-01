@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom'
 import { handleAnswerQuestion } from '../actions/questions'
 import { isQuestionAnswered, formatQuestion } from '../utils/helpers'
 import { Redirect } from 'react-router-dom'
-import { deleteNewQuestionId } from '../actions/questions'
+// import { deleteNewQuestionId } from '../actions/questions'
 
 export default function QuestionPoll({location, match}) {
   const {question, author, authedUserId} = useSelector(state => {
@@ -36,9 +36,11 @@ export default function QuestionPoll({location, match}) {
 
 
   // To reactivate the new question page
-  useEffect(() => {
-    dispatch(deleteNewQuestionId())
-  }, [])
+  // No longer needed since we redirect to the homepage
+  // useEffect(() => {
+  //   dispatch(deleteNewQuestionId())
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [])
 
   const [choice, setChoice] = useState(null)
   const dispatch = useDispatch()
